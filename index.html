@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pudotus</title>
+
+    <link rel="stylesheet" href="index.css" />
+    <script type="module" src="index.js"></script>
+</head>
+<body>
+    <div id="status-container">
+        <img src="spinner.png" alt="" aria-hidden />
+        <span id="status">Loading</span>
+    </div>
+    <table id="main"></table>
+
+    <template id="row-template">
+        <tr>
+            <th class="height" scope="row"></th>
+            <td class="temperature"></td>
+            <td class="wind-speed"></td>
+            <td class="wind-direction">
+                <div class="arrow"></div>
+            </td>
+        </tr>
+    </template>
+</body>
+</html>

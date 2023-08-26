@@ -1,0 +1,53 @@
+:root {
+    background-color: #111;
+    color: white;
+}
+
+#status-container {
+    text-align: center;
+}
+#status-container.hidden {
+    opacity: 0;
+}
+#status::after {
+    content: '…';
+}
+
+#main {
+    margin: 0 auto;
+}
+
+tr {
+    animation: fadeIn 1s;
+}
+
+th, td {
+    text-align: right;
+    padding: 0.2em 1em;
+}
+
+.height::after {
+    content: ' m';
+}
+.temperature::after {
+    content: ' ℃';
+}
+.wind-speed::after {
+    content: ' m/s';
+}
+
+.wind-direction .arrow {
+    font-size: 1.5em;
+    font-weight: bold;
+
+    transform: rotate(var(--direction));
+}
+.wind-direction .arrow::after {
+    content: '↓';
+}
+
+@keyframes fadeIn {
+    0% { opacity: 0; }
+    100% { opacity: 1; }
+}
+  
