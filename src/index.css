@@ -41,7 +41,9 @@ table {
 th,
 td {
     text-align: right;
-    padding: 0.2em 1em;
+    padding: 0.2em 0.5em;
+
+    white-space: nowrap;
 }
 
 .height::after {
