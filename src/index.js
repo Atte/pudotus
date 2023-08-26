@@ -89,7 +89,6 @@ async function refresh() {
 
     status.textContent = 'Geolocating';
     statusContainer.classList.add('loading');
-    main.innerHTML = '';
 
     /** @type {GeolocationPosition} */
     const position = await new Promise((resolve, reject) => {
@@ -102,6 +101,7 @@ async function refresh() {
 
     abortController?.abort();
     const myAbortController = (abortController = new AbortController());
+    main.innerHTML = '';
 
     const updateTime = getDataTime();
     let data;
