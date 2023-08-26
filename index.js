@@ -18,8 +18,6 @@ const HEIGHTS = [
     1000,
     600,
     300,
-    200,
-    100,
     0,
 ];
 
@@ -71,7 +69,7 @@ async function reload_impl() {
         const data = await getData(latlon, height);
 
         const tr = ROW_TEMPLATE.cloneNode(true);
-        tr.querySelector('.height').textContent = height;
+        tr.querySelector('.height').textContent = height.toLocaleString('fi');
         tr.querySelector('.temperature').textContent = data[PARAMS.Temperature].toFixed(0);
         tr.querySelector('.wind-speed').textContent = data[PARAMS.WindSpeedMS].toFixed(0);
         tr.querySelector('.wind-direction .arrow').setAttribute('style', `--direction: ${data[PARAMS.WindDirection]}deg`);
