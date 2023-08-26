@@ -12,6 +12,7 @@ const CLOUD_HEIGHTS = {
     4000: SURFACE_PARAMS.MediumCloudCover,
     2000: SURFACE_PARAMS.LowCloudCover,
 };
+const MINUTES_ACCURACY = 5;
 
 /** @returns {string} */
 function getDataTime() {
@@ -20,7 +21,8 @@ function getDataTime() {
     const month = (now.getUTCMonth() + 1).toString().padStart(2, '0');
     const day = now.getUTCDate().toString().padStart(2, '0');
     const hour = now.getUTCHours().toString().padStart(2, '0');
-    return `${year}-${month}-${day}T${hour}:00:00Z`;
+    const minute = (Math.floor(now.getUTCMinutes() / MINUTES_ACCURACY) * MINUTES_ACCURACY).toString().padStart(2, '0');
+    return `${year}-${month}-${day}T${hour}:${minute}:00Z`;
 }
 
 /**
@@ -36,6 +38,7 @@ async function getData(time, latlon, height, abortController) {
     url.searchParams.set('latlon', latlon.join(','));
     url.searchParams.set('starttime', time);
     url.searchParams.set('endtime', time);
+    url.searchParams.set('timestep', 1);
 
     if (height == 0) {
         url.searchParams.set('storedquery_id', 'fmi::forecast::harmonie::surface::point::simple');
@@ -137,7 +140,6 @@ async function refresh() {
 
 let timer = null;
 function setupTimer() {
-    const minutes = 60 - new Date().getMinutes() + 1;
     timer = setTimeout(async () => {
         timer = null;
         if (document.visibilityState == 'visible') {
@@ -146,7 +148,7 @@ function setupTimer() {
         if (!timer) {
             setupTimer();
         }
-    }, 1000 * 60 * minutes);
+    }, 1000 * 60 * MINUTES_ACCURACY);
 }
 
 document.addEventListener('visibilitychange', async () => {
