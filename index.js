@@ -4,22 +4,8 @@ const PARAMS = {
     Temperature: 'Temperature',
     WindDirection: 'WindDirection',
     WindSpeedMS: 'WindSpeedMS',
-    // WindUMS: 'WindUMS',
-    // WindVMS: 'WindVMS',
-    // VerticalVelocityMMS: 'VerticalVelocityMMS',
 };
-const HEIGHTS = [
-    4000,
-    3500,
-    3000,
-    2500,
-    2000,
-    1500,
-    1000,
-    600,
-    300,
-    0,
-];
+const HEIGHTS = [4000, 3500, 3000, 2500, 2000, 1500, 1000, 600, 300, 0];
 
 const MAIN = document.getElementById('main');
 const STATUS = document.getElementById('status');
@@ -35,11 +21,14 @@ async function getData(latlon, height) {
     const query = height == 0 ? SURFACE_QUERY : QUERY;
     const params = Object.values(PARAMS).join(',');
 
-    const resp = await fetch(`https://opendata.fmi.fi/wfs?request=GetFeature&storedquery_id=${query}&parameters=${params}&latlon=${latlon}&height=${height}&starttime=${time}&endtime=${time}`, {
-        mode: 'cors',
-        credentials: 'omit',
-        referrerPolicy: 'no-referrer'
-    });
+    const resp = await fetch(
+        `https://opendata.fmi.fi/wfs?request=GetFeature&storedquery_id=${query}&parameters=${params}&latlon=${latlon}&height=${height}&starttime=${time}&endtime=${time}`,
+        {
+            mode: 'cors',
+            credentials: 'omit',
+            referrerPolicy: 'no-referrer',
+        }
+    );
     const dom = new DOMParser().parseFromString(await resp.text(), 'text/xml');
 
     const data = {};
@@ -59,10 +48,7 @@ async function reload_impl() {
 
     /** @type {GeolocationPosition} */
     const position = await new Promise((resolve, reject) => navigator.geolocation.getCurrentPosition(resolve, reject));
-    const latlon = [
-        position.coords.latitude.toFixed(2),
-        position.coords.longitude.toFixed(2),
-    ];
+    const latlon = [position.coords.latitude.toFixed(2), position.coords.longitude.toFixed(2)];
 
     for (const height of HEIGHTS) {
         STATUS.textContent = `Loading ${height}m`;
@@ -80,7 +66,7 @@ async function reload_impl() {
 }
 
 function reload() {
-    reload_impl().catch(err => {
+    reload_impl().catch((err) => {
         console.error(err);
     });
 }

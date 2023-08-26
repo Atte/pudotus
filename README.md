@@ -1,13 +1,10 @@
-pudotus
-=======
+# pudotus
 
 Shows weather at altitudes relevant to skydivers.
 
 Uses [Finnish Meteorological Institute's open data](https://en.ilmatieteenlaitos.fi/open-data).
 
-
-License
--------
+## License
 
 The software itself is licensed under the [MIT License](./LICENSE).
 

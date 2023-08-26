@@ -1,32 +1,36 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Pudotus</title>
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Pudotus</title>
 
-    <link rel="stylesheet" href="index.css" />
-    <script type="module" src="index.js"></script>
-</head>
-<body>
-    <div id="status-container">
-        <img src="spinner.png" alt="" aria-hidden />
-        <span id="status">Loading</span>
-    </div>
-    <table id="main"></table>
-    <div id="footer">
-        <a href="https://en.ilmatieteenlaitos.fi/open-data">The Finnish Meteorological Institute's open data</a> used on this page is licensed under a <a href="https://creativecommons.org/licenses/by/4.0/">Creative Commons Attribution 4.0 International license</a>.
-    </div>
+        <link rel="stylesheet" href="index.css" />
+        <script type="module" src="index.js"></script>
+    </head>
+    <body>
+        <div id="status-container">
+            <img src="spinner.png" alt="" aria-hidden />
+            <span id="status">Loading</span>
+        </div>
 
-    <template id="row-template">
-        <tr>
-            <th class="height" scope="row"></th>
-            <td class="temperature"></td>
-            <td class="wind-speed"></td>
-            <td class="wind-direction">
-                <div class="arrow"></div>
-            </td>
-        </tr>
-    </template>
-</body>
+        <table id="main"></table>
+
+        <div id="footer">
+            <a href="https://en.ilmatieteenlaitos.fi/open-data">The Finnish Meteorological Institute's open data</a>
+            used on this page is licensed under a
+            <a href="https://creativecommons.org/licenses/by/4.0/">Creative Commons Attribution 4.0 International license</a>.
+        </div>
+
+        <template id="row-template">
+            <tr>
+                <th class="height" scope="row"></th>
+                <td class="temperature"></td>
+                <td class="wind-speed"></td>
+                <td class="wind-direction">
+                    <div class="arrow"></div>
+                </td>
+            </tr>
+        </template>
+    </body>
 </html>

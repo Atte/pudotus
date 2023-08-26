@@ -4,7 +4,9 @@
     color: white;
 }
 
-a, a:visited, a:active {
+a,
+a:visited,
+a:active {
     color: white;
 }
 
@@ -32,7 +34,8 @@ tr {
     animation: fadeIn 1s;
 }
 
-th, td {
+th,
+td {
     text-align: right;
     padding: 0.2em 1em;
 }
@@ -58,7 +61,10 @@ th, td {
 }
 
 @keyframes fadeIn {
-    0% { opacity: 0; }
-    100% { opacity: 1; }
+    0% {
+        opacity: 0;
+    }
+    100% {
+        opacity: 1;
+    }
 }
-  
