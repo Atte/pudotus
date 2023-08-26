@@ -5,13 +5,22 @@ const PARAMS = {
     WindSpeedMS: 'WindSpeedMS',
 };
 
-/**
- * @param {[number|string, number|string]} latlon
- */
-async function getData(latlon, height) {
+function getDataTime() {
     const now = new Date();
-    const time = `${now.getUTCFullYear()}-${now.getUTCMonth() + 1}-${now.getUTCDate()}T${now.getUTCHours()}:00:00Z`;
+    const year = now.getUTCFullYear();
+    const month = (now.getUTCMonth() + 1).toString().padStart(2, '0');
+    const day = now.getUTCDate().toString().padStart(2, '0');
+    const hour = now.getUTCHours().toString().padStart(2, '0');
+    return `${year}-${month}-${day}T${hour}:00:00Z`;
+}
 
+/**
+ * @param {string} time
+ * @param {[number|string, number|string]} latlon
+ * @param {number} height
+ * @returns {Promise<{[key: string]: number}>}
+ */
+async function getData(time, latlon, height) {
     const url = new URL('https://opendata.fmi.fi/wfs');
     url.searchParams.set('request', 'GetFeature');
     url.searchParams.set('parameters', Object.values(PARAMS).join(','));
@@ -26,12 +35,12 @@ async function getData(latlon, height) {
         url.searchParams.set('height', height);
     }
 
-    const resp = await fetch(url, {
-        mode: 'cors',
-        credentials: 'omit',
-        referrerPolicy: 'no-referrer',
-    });
-    const dom = new DOMParser().parseFromString(await resp.text(), 'text/xml');
+    const response = await fetch(url);
+    if (!response.ok) {
+        throw new Error(`${response.status} ${response.statusText}`);
+    }
+
+    const dom = new DOMParser().parseFromString(await response.text(), 'text/xml');
 
     const data = {};
     for (const el of dom.querySelectorAll('member > BsWfsElement')) {
@@ -51,16 +60,17 @@ async function reload_impl() {
     const statusContainer = document.getElementById('status-container');
 
     status.textContent = 'Geolocating';
-    statusContainer.classList.remove('hidden');
+    statusContainer.classList.add('loading');
     main.innerHTML = '';
 
     /** @type {GeolocationPosition} */
     const position = await new Promise((resolve, reject) => navigator.geolocation.getCurrentPosition(resolve, reject));
     const latlon = [position.coords.latitude.toFixed(2), position.coords.longitude.toFixed(2)];
 
+    const time = getDataTime();
     for (const height of HEIGHTS) {
         status.textContent = `Loading ${height}m`;
-        const data = await getData(latlon, height);
+        const data = await getData(time, latlon, height);
 
         const tr = rowTemplate.cloneNode(true);
         tr.querySelector('.height').textContent = height.toLocaleString('fi');
@@ -70,7 +80,8 @@ async function reload_impl() {
         main.appendChild(tr);
     }
 
-    statusContainer.classList.add('hidden');
+    status.textContent = new Date(time).toLocaleString('fi');
+    statusContainer.classList.remove('loading');
 }
 
 function reload() {

@@ -5,12 +5,18 @@
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         <title>Pudotus</title>
 
+        <meta
+            http-equiv="Content-Security-Policy"
+            content="default-src 'none'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self'; connect-src https://opendata.fmi.fi/wfs; form-action 'none'; block-all-mixed-content"
+        />
+        <meta name="referrer" content="strict-origin" />
+
         <link rel="stylesheet" href="index.css" />
         <script type="module" src="index.js"></script>
     </head>
     <body>
-        <div id="status-container">
-            <img src="spinner.png" alt="" aria-hidden />
+        <div id="status-container" class="loading">
+            <img id="spinner" src="spinner.png" alt="" aria-hidden />
             <span id="status">Loading</span>
         </div>
 
