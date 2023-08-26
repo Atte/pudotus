@@ -4,6 +4,14 @@ const PARAMS = {
     WindDirection: 'WindDirection',
     WindSpeedMS: 'WindSpeedMS',
 };
+const SURFACE_PARAMS = {
+    MediumCloudCover: 'MediumCloudCover',
+    LowCloudCover: 'LowCloudCover',
+};
+const CLOUD_HEIGHTS = {
+    4000: SURFACE_PARAMS.MediumCloudCover,
+    2000: SURFACE_PARAMS.LowCloudCover,
+};
 
 /** @returns {string} */
 function getDataTime() {
@@ -25,15 +33,16 @@ function getDataTime() {
 async function getData(time, latlon, height, abortController) {
     const url = new URL('https://opendata.fmi.fi/wfs');
     url.searchParams.set('request', 'GetFeature');
-    url.searchParams.set('parameters', Object.values(PARAMS).join(','));
     url.searchParams.set('latlon', latlon.join(','));
     url.searchParams.set('starttime', time);
     url.searchParams.set('endtime', time);
 
     if (height == 0) {
         url.searchParams.set('storedquery_id', 'fmi::forecast::harmonie::surface::point::simple');
+        url.searchParams.set('parameters', Object.values(PARAMS).concat(Object.values(SURFACE_PARAMS)).join(','));
     } else {
         url.searchParams.set('storedquery_id', 'fmi::forecast::harmonie::hybrid::point::simple');
+        url.searchParams.set('parameters', Object.values(PARAMS).join(','));
         url.searchParams.set('height', height);
     }
 
@@ -66,6 +75,9 @@ let abortController = null;
 async function refresh() {
     /** @type {HTMLTableRowElement} */
     const rowTemplate = document.getElementById('row-template').content.querySelector('tr');
+    /** @type {HTMLTableRowElement} */
+    const cloudCoverTemplate = document.getElementById('cloud-cover-template').content.querySelector('td');
+
     const main = document.getElementById('main');
     const status = document.getElementById('status');
     const statusContainer = document.getElementById('status-container');
@@ -87,16 +99,29 @@ async function refresh() {
     const myAbortController = (abortController = new AbortController());
 
     const updateTime = getDataTime();
+    let data;
     for (const height of HEIGHTS) {
         status.textContent = `Loading ${height}m`;
-        const data = await getData(updateTime, latlon, height, myAbortController);
+        data = await getData(updateTime, latlon, height, myAbortController);
+
+        if (myAbortController.signal.aborted) {
+            return;
+        }
 
         const tr = rowTemplate.cloneNode(true);
+        tr.dataset.height = height;
         tr.querySelector('.height').textContent = height.toLocaleString('fi');
         tr.querySelector('.temperature').textContent = data[PARAMS.Temperature].toFixed(0);
         tr.querySelector('.wind-speed').textContent = data[PARAMS.WindSpeedMS].toFixed(0);
         tr.querySelector('.wind-direction .arrow').setAttribute('style', `--direction: ${data[PARAMS.WindDirection]}deg`);
         main.appendChild(tr);
+    }
+
+    for (const [height, param] of Object.entries(CLOUD_HEIGHTS)) {
+        const tr = main.querySelector(`tr[data-height="${height}"]`);
+        const td = cloudCoverTemplate.cloneNode(true);
+        td.querySelector('.value').textContent = data[param].toFixed(0);
+        tr.appendChild(td);
     }
 
     if (abortController === myAbortController) {

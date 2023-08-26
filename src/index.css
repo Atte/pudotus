@@ -30,7 +30,8 @@ a:active {
 
 #status-container,
 tr,
-#footer {
+#footer,
+.cloud-cover {
     animation: fadeIn 1s;
 }
 
@@ -52,6 +53,9 @@ td {
 .wind-speed::after {
     content: ' m/s';
 }
+.cloud-cover .value::after {
+    content: ' %';
+}
 
 .wind-direction .arrow {
     font-size: 1.5em;
@@ -61,6 +65,16 @@ td {
 }
 .wind-direction .arrow::after {
     content: '↓';
+}
+
+.cloud-cover {
+    border: 1px solid #ccc;
+    border-left: none;
+
+    fill: #ccc;
+    stroke: #ccc;
+
+    text-align: center;
 }
 
 @keyframes fadeIn {
