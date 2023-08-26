@@ -1,14 +1,20 @@
 :root {
+    --background-color: #111;
+    --color: #eee;
+    --dim-color: #ccc;
+}
+
+:root {
     font-family: sans-serif;
-    background-color: #111;
-    color: #fff;
+    background-color: var(--background-color);
+    color: var(--color);
 }
 
 #footer,
 a,
 a:visited,
 a:active {
-    color: #ccc;
+    color: var(--dim-color);
 }
 
 #status-container {
@@ -67,18 +73,18 @@ td {
     font-size: 1.5em;
     font-weight: bold;
 
-    transform: rotate(var(--direction));
+    transform: rotate(var(--wind-direction));
 }
 .wind-direction .arrow::after {
     content: '↓';
 }
 
 .cloud-cover {
-    border: 1px solid #ccc;
+    border: 1px solid var(--dim-color);
     border-left: none;
 
-    fill: #ccc;
-    stroke: #ccc;
+    fill: var(--dim-color);
+    stroke: var(--dim-color);
 
     text-align: center;
 }

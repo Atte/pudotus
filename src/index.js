@@ -76,6 +76,8 @@ let abortController = null;
 
 /** @returns {Promise<void>} */
 async function refresh() {
+    console.log('Refreshing...');
+
     /** @type {HTMLTableRowElement} */
     const rowTemplate = document.getElementById('row-template').content.querySelector('tr');
     /** @type {HTMLTableRowElement} */
@@ -116,7 +118,8 @@ async function refresh() {
         tr.querySelector('.height').textContent = height.toLocaleString('fi');
         tr.querySelector('.temperature').textContent = data[PARAMS.Temperature].toFixed(0);
         tr.querySelector('.wind-speed').textContent = data[PARAMS.WindSpeedMS].toFixed(0);
-        tr.querySelector('.wind-direction .arrow').setAttribute('style', `--direction: ${data[PARAMS.WindDirection]}deg`);
+        tr.querySelector('.wind-direction').setAttribute('title', `${data[PARAMS.WindDirection].toFixed(0)}°`);
+        tr.querySelector('.wind-direction .arrow').setAttribute('style', `--wind-direction: ${data[PARAMS.WindDirection]}deg`);
         main.appendChild(tr);
     }
 
@@ -140,6 +143,9 @@ async function refresh() {
 
 let timer = null;
 function setupTimer() {
+    const seconds = 60 * MINUTES_ACCURACY - ((new Date().getTime() / 1000) % (60 * MINUTES_ACCURACY)) + Math.random() * 60;
+    console.log(`Next refresh in ${seconds.toFixed(0)} seconds`);
+
     timer = setTimeout(async () => {
         timer = null;
         if (document.visibilityState == 'visible') {
@@ -148,7 +154,7 @@ function setupTimer() {
         if (!timer) {
             setupTimer();
         }
-    }, 1000 * 60 * MINUTES_ACCURACY);
+    }, 1000 * seconds);
 }
 
 document.addEventListener('visibilitychange', async () => {
@@ -167,4 +173,4 @@ addEventListener('unhandledrejection', (event) => {
     console.error(event);
 });
 
-refresh();
+refresh().then(setupTimer);
