@@ -25,19 +25,27 @@
         <script type="module" src="./src/index.js"></script>
     </head>
     <body>
-        <div id="status-container" class="loading">
+        <header id="status-container" class="loading">
             <img id="spinner" src="./img/spinner.png" alt="" aria-hidden />
             <span id="status">Loading</span>
-        </div>
+        </header>
 
-        <table id="main"></table>
+        <main>
+            <table>
+                <tbody id="main"></tbody>
+            </table>
+        </main>
 
-        <div id="footer">
-            <a href="https://en.ilmatieteenlaitos.fi/open-data">The Finnish Meteorological Institute's open data</a>
-            used on this page is licensed under a
-            <a href="https://creativecommons.org/licenses/by/4.0/">Creative Commons Attribution 4.0 International license</a>.<br />
-            <a href="https://www.flaticon.com/free-icons/thrill" title="thrill icons">Thrill icons created by gravisio - Flaticon</a>.
-        </div>
+        <footer id="footer">
+            <div>
+                <a href="https://en.ilmatieteenlaitos.fi/open-data">The Finnish Meteorological Institute's open data</a>
+                used on this page is licensed under a
+                <a href="https://creativecommons.org/licenses/by/4.0/">Creative Commons Attribution 4.0 International license</a>.
+            </div>
+            <div>
+                <a href="https://www.flaticon.com/free-icons/thrill" title="thrill icons">Thrill icons created by gravisio - Flaticon</a>.
+            </div>
+        </footer>
 
         <template id="row-template">
             <tr>

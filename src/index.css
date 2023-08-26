@@ -13,6 +13,7 @@ a:active {
 
 #status-container {
     text-align: center;
+    font-weight: bold;
 }
 #status-container.loading #status::after {
     content: '…';
@@ -24,11 +25,7 @@ a:active {
 #footer {
     margin-top: 1em;
     text-align: center;
-    font-size: 0.75em;
-}
-
-#main {
-    margin: 0 auto;
+    font-size: 0.7em;
 }
 
 #status-container,
@@ -37,6 +34,9 @@ tr,
     animation: fadeIn 1s;
 }
 
+table {
+    margin: 0 auto;
+}
 th,
 td {
     text-align: right;

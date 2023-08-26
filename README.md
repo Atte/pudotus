@@ -9,3 +9,5 @@ Uses [Finnish Meteorological Institute's open data](https://en.ilmatieteenlaitos
 The software itself is licensed under the [MIT License](./LICENSE).
 
 Finnish Meteorological Institute data displayed by the software [is licensed under CC BY 4.0](https://en.ilmatieteenlaitos.fi/open-data-licence).
+
+[Thrill icons created by gravisio - Flaticon](https://www.flaticon.com/free-icons/thrill).

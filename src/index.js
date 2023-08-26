@@ -5,6 +5,7 @@ const PARAMS = {
     WindSpeedMS: 'WindSpeedMS',
 };
 
+/** @returns {string} */
 function getDataTime() {
     const now = new Date();
     const year = now.getUTCFullYear();
@@ -52,7 +53,11 @@ async function getData(time, latlon, height) {
     return data;
 }
 
-async function reload_impl() {
+/** @type {string|null} */
+let updateTime = null;
+
+/** @returns {Promise<void>} */
+async function refresh() {
     /** @type {HTMLTableRowElement} */
     const rowTemplate = document.getElementById('row-template').content.querySelector('tr');
     const main = document.getElementById('main');
@@ -67,10 +72,10 @@ async function reload_impl() {
     const position = await new Promise((resolve, reject) => navigator.geolocation.getCurrentPosition(resolve, reject));
     const latlon = [position.coords.latitude.toFixed(2), position.coords.longitude.toFixed(2)];
 
-    const time = getDataTime();
+    updateTime = getDataTime();
     for (const height of HEIGHTS) {
         status.textContent = `Loading ${height}m`;
-        const data = await getData(time, latlon, height);
+        const data = await getData(updateTime, latlon, height);
 
         const tr = rowTemplate.cloneNode(true);
         tr.querySelector('.height').textContent = height.toLocaleString('fi');
@@ -80,27 +85,41 @@ async function reload_impl() {
         main.appendChild(tr);
     }
 
-    status.textContent = new Date(time).toLocaleString('fi');
+    status.textContent = new Date(updateTime).toLocaleString('fi', {
+        dateStyle: 'short',
+        timeStyle: 'short',
+    });
     statusContainer.classList.remove('loading');
 }
 
-function reload() {
-    reload_impl().catch((err) => {
-        console.error(err);
-    });
+let timer = null;
+function setupTimer() {
+    const minutes = 60 - new Date().getMinutes() + 1;
+    timer = setTimeout(async () => {
+        timer = null;
+        await refresh();
+        if (!timer) {
+            setupTimer();
+        }
+    }, 1000 * 60 * minutes);
 }
 
-let timer = null;
-document.addEventListener('visibilitychange', () => {
+document.addEventListener('visibilitychange', async () => {
     if (timer) {
-        clearInterval(timer);
+        clearTimeout(timer);
         timer = null;
     }
 
     if (document.visibilityState == 'visible') {
-        reload();
-        timer = setInterval(reload, 1000 * 60 * 5);
+        if (updateTime !== getDataTime()) {
+            await refresh();
+        }
+        setupTimer();
     }
 });
 
-reload();
+addEventListener('unhandledrejection', (event) => {
+    console.error(event);
+});
+
+refresh();

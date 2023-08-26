@@ -1,3 +1,4 @@
 localhost
 
+header Cache-Control no-cache
 file_server
