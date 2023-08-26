@@ -13,7 +13,11 @@ a:active {
 
 #status-container {
     text-align: center;
+
     font-weight: bold;
+    font-size: 1.2em;
+
+    margin-bottom: 0.5em;
 }
 #status-container.loading #status::after {
     content: '…';
