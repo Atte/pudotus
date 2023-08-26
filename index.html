@@ -11,6 +11,8 @@
         />
         <meta name="referrer" content="strict-origin" />
 
+        <link rel="preconnect" href="https://opendata.fmi.fi" crossorigin />
+
         <link rel="icon" type="image/png" href="./img/512.png" sizes="512x512" />
         <link rel="icon" type="image/png" href="./img/256.png" sizes="256x256" />
         <link rel="icon" type="image/png" href="./img/128.png" sizes="128x128" />
@@ -26,7 +28,7 @@
     </head>
     <body>
         <header id="status-container" class="loading">
-            <img id="spinner" src="./img/spinner.png" alt="" aria-hidden />
+            <img id="spinner" src="./img/spinner.png" width="16" height="16" fetchpriority="low" alt="" aria-hidden />
             <span id="status">Loading</span>
         </header>
 

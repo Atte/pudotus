@@ -19,9 +19,10 @@ function getDataTime() {
  * @param {string} time
  * @param {[number|string, number|string]} latlon
  * @param {number} height
+ * @param {AbortController?} abortController
  * @returns {Promise<{[key: string]: number}>}
  */
-async function getData(time, latlon, height) {
+async function getData(time, latlon, height, abortController) {
     const url = new URL('https://opendata.fmi.fi/wfs');
     url.searchParams.set('request', 'GetFeature');
     url.searchParams.set('parameters', Object.values(PARAMS).join(','));
@@ -36,7 +37,12 @@ async function getData(time, latlon, height) {
         url.searchParams.set('height', height);
     }
 
-    const response = await fetch(url);
+    const response = await fetch(url, {
+        mode: 'cors',
+        credentials: 'omit',
+        keepalive: true,
+        signal: abortController?.signal,
+    });
     if (!response.ok) {
         throw new Error(`${response.status} ${response.statusText}`);
     }
@@ -53,8 +59,8 @@ async function getData(time, latlon, height) {
     return data;
 }
 
-/** @type {string|null} */
-let updateTime = null;
+/** @type {AbortController|null} */
+let abortController = null;
 
 /** @returns {Promise<void>} */
 async function refresh() {
@@ -69,13 +75,21 @@ async function refresh() {
     main.innerHTML = '';
 
     /** @type {GeolocationPosition} */
-    const position = await new Promise((resolve, reject) => navigator.geolocation.getCurrentPosition(resolve, reject));
+    const position = await new Promise((resolve, reject) =>
+        navigator.geolocation.getCurrentPosition(resolve, reject, {
+            maximumAge: 1000 * 60,
+            enableHighAccuracy: false,
+        })
+    );
     const latlon = [position.coords.latitude.toFixed(2), position.coords.longitude.toFixed(2)];
 
-    updateTime = getDataTime();
+    abortController?.abort();
+    const myAbortController = (abortController = new AbortController());
+
+    const updateTime = getDataTime();
     for (const height of HEIGHTS) {
         status.textContent = `Loading ${height}m`;
-        const data = await getData(updateTime, latlon, height);
+        const data = await getData(updateTime, latlon, height, myAbortController);
 
         const tr = rowTemplate.cloneNode(true);
         tr.querySelector('.height').textContent = height.toLocaleString('fi');
@@ -83,6 +97,10 @@ async function refresh() {
         tr.querySelector('.wind-speed').textContent = data[PARAMS.WindSpeedMS].toFixed(0);
         tr.querySelector('.wind-direction .arrow').setAttribute('style', `--direction: ${data[PARAMS.WindDirection]}deg`);
         main.appendChild(tr);
+    }
+
+    if (abortController === myAbortController) {
+        abortController = null;
     }
 
     status.textContent = new Date(updateTime).toLocaleString('fi', {
@@ -97,7 +115,9 @@ function setupTimer() {
     const minutes = 60 - new Date().getMinutes() + 1;
     timer = setTimeout(async () => {
         timer = null;
-        await refresh();
+        if (document.visibilityState == 'visible') {
+            await refresh();
+        }
         if (!timer) {
             setupTimer();
         }
@@ -111,9 +131,7 @@ document.addEventListener('visibilitychange', async () => {
     }
 
     if (document.visibilityState == 'visible') {
-        if (updateTime !== getDataTime()) {
-            await refresh();
-        }
+        await refresh();
         setupTimer();
     }
 });
