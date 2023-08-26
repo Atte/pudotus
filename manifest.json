@@ -1,0 +1,49 @@
+{
+    "name": "Pudotus",
+    "short_name": "Pudotus",
+    "description": "Shows weather at altitudes relevant to skydivers.",
+    "categories": ["weather"],
+    "display": "standalone",
+    "orientation": "portrait-primary",
+    "client_mode": "focus-existing",
+    "background_color": "#111",
+    "theme_color": "#1e81ce",
+    "start_url": ".",
+    "icons": [
+        {
+            "src": "img/512.png",
+            "type": "image/png",
+            "sizes": "512x512"
+        },
+        {
+            "src": "img/256.png",
+            "type": "image/png",
+            "sizes": "256x256"
+        },
+        {
+            "src": "img/128.png",
+            "type": "image/png",
+            "sizes": "128x128"
+        },
+        {
+            "src": "img/64.png",
+            "type": "image/png",
+            "sizes": "64x64"
+        },
+        {
+            "src": "img/32.png",
+            "type": "image/png",
+            "sizes": "32x32"
+        },
+        {
+            "src": "img/24.png",
+            "type": "image/png",
+            "sizes": "24x24"
+        },
+        {
+            "src": "img/16.png",
+            "type": "image/png",
+            "sizes": "16x16"
+        }
+    ]
+}

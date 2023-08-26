@@ -7,25 +7,36 @@
 
         <meta
             http-equiv="Content-Security-Policy"
-            content="default-src 'none'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self'; connect-src https://opendata.fmi.fi/wfs; form-action 'none'; block-all-mixed-content"
+            content="default-src 'none'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self'; connect-src https://opendata.fmi.fi/wfs; form-action 'none'; block-all-mixed-content; manifest-src 'self'"
         />
         <meta name="referrer" content="strict-origin" />
 
-        <link rel="stylesheet" href="index.css" />
-        <script type="module" src="index.js"></script>
+        <link rel="icon" type="image/png" href="./img/512.png" sizes="512x512" />
+        <link rel="icon" type="image/png" href="./img/256.png" sizes="256x256" />
+        <link rel="icon" type="image/png" href="./img/128.png" sizes="128x128" />
+        <link rel="icon" type="image/png" href="./img/64.png" sizes="64x64" />
+        <link rel="icon" type="image/png" href="./img/32.png" sizes="32x32" />
+        <link rel="icon" type="image/png" href="./img/24.png" sizes="24x24" />
+        <link rel="icon" type="image/png" href="./img/16.png" sizes="16x16" />
+
+        <link rel="manifest" href="./manifest.json" />
+
+        <link rel="stylesheet" href="./src/index.css" />
+        <script type="module" src="./src/index.js"></script>
     </head>
     <body>
         <div id="status-container" class="loading">
-            <img id="spinner" src="spinner.png" alt="" aria-hidden />
+            <img id="spinner" src="./img/spinner.png" alt="" aria-hidden />
             <span id="status">Loading</span>
         </div>
 
         <table id="main"></table>
 
         <div id="footer">
-            <a href="https://en.ilmatieteenlaitos.fi/open-data">The Finnish Meteorological Institute's open data</a><br />
-            used on this page is licensed under a<br />
-            <a href="https://creativecommons.org/licenses/by/4.0/">Creative Commons Attribution 4.0 International license</a>.
+            <a href="https://en.ilmatieteenlaitos.fi/open-data">The Finnish Meteorological Institute's open data</a>
+            used on this page is licensed under a
+            <a href="https://creativecommons.org/licenses/by/4.0/">Creative Commons Attribution 4.0 International license</a>.<br />
+            <a href="https://www.flaticon.com/free-icons/thrill" title="thrill icons">Thrill icons created by gravisio - Flaticon</a>.
         </div>
 
         <template id="row-template">
