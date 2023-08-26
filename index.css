@@ -1,20 +1,21 @@
 :root {
     font-family: sans-serif;
     background-color: #111;
-    color: white;
+    color: #fff;
 }
 
+#footer,
 a,
 a:visited,
 a:active {
-    color: white;
+    color: #ccc;
 }
 
 #status-container {
     text-align: center;
 }
 #status-container.hidden {
-    opacity: 0;
+    opacity: 0 !important;
 }
 #status::after {
     content: '…';
@@ -30,7 +31,9 @@ a:active {
     margin: 0 auto;
 }
 
-tr {
+#status-container,
+tr,
+#footer {
     animation: fadeIn 1s;
 }
 
