@@ -40,7 +40,7 @@ async function getData(time, latlon, height, abortController) {
     url.searchParams.set('endtime', time);
     url.searchParams.set('timestep', 1);
 
-    if (height == 0) {
+    if (height === 0) {
         url.searchParams.set('storedquery_id', 'fmi::forecast::harmonie::surface::point::simple');
         url.searchParams.set('parameters', Object.values(PARAMS).concat(Object.values(SURFACE_PARAMS)).join(','));
     } else {
@@ -92,12 +92,12 @@ async function refresh() {
     main.innerHTML = '';
 
     /** @type {GeolocationPosition} */
-    const position = await new Promise((resolve, reject) =>
+    const position = await new Promise((resolve, reject) => {
         navigator.geolocation.getCurrentPosition(resolve, reject, {
             maximumAge: 1000 * 60,
             enableHighAccuracy: false,
-        })
-    );
+        });
+    });
     const latlon = [position.coords.latitude.toFixed(2), position.coords.longitude.toFixed(2)];
 
     abortController?.abort();
@@ -148,7 +148,7 @@ function setupTimer() {
 
     timer = setTimeout(async () => {
         timer = null;
-        if (document.visibilityState == 'visible') {
+        if (document.visibilityState === 'visible') {
             await refresh();
         }
         if (!timer) {
@@ -163,7 +163,7 @@ document.addEventListener('visibilitychange', async () => {
         timer = null;
     }
 
-    if (document.visibilityState == 'visible') {
+    if (document.visibilityState === 'visible') {
         await refresh();
         setupTimer();
     }

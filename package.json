@@ -1,0 +1,28 @@
+{
+    "name": "pudotus",
+    "version": "1.0.0",
+    "description": "Shows weather at altitudes relevant to skydivers.",
+    "author": "Atte Virtanen",
+    "license": "MIT",
+    "homepage": "https://pudotus.atte.fi",
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/Atte/pudotus.git"
+    },
+    "bugs": {
+        "url": "https://github.com/Atte/pudotus/issues"
+    },
+    "type": "module",
+    "main": "src/index.js",
+    "scripts": {
+        "lint": "eslint ./src/*.js && stylelint ./src/*.css",
+        "fix": "eslint --fix ./src/*.js && stylelint --fix ./src/*.css"
+    },
+    "devDependencies": {
+        "eslint": "^8.48.0",
+        "eslint-config-problems": "^8.0.0",
+        "prettier": "^3.0.2",
+        "stylelint": "^15.10.3",
+        "stylelint-config-standard": "^34.0.0"
+    }
+}

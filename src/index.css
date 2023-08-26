@@ -2,9 +2,7 @@
     --background-color: #111;
     --color: #eee;
     --dim-color: #ccc;
-}
 
-:root {
     font-family: sans-serif;
     background-color: var(--background-color);
     color: var(--color);
@@ -19,15 +17,15 @@ a:active {
 
 #status-container {
     text-align: center;
-
     font-weight: bold;
     font-size: 1.2em;
-
     margin-bottom: 0.5em;
 }
+
 #status-container.loading #status::after {
     content: '…';
 }
+
 #status-container:not(.loading) #spinner {
     display: none;
 }
@@ -42,29 +40,32 @@ a:active {
 tr,
 #footer,
 .cloud-cover {
-    animation: fadeIn 1s;
+    animation: fade-in 1s;
 }
 
 table {
     margin: 0 auto;
 }
+
 th,
 td {
     text-align: right;
     padding: 0.2em 0.5em;
-
     white-space: nowrap;
 }
 
 .height::after {
     content: ' m';
 }
+
 .temperature::after {
     content: ' ℃';
 }
+
 .wind-speed::after {
     content: ' m/s';
 }
+
 .cloud-cover .value::after {
     content: ' %';
 }
@@ -72,9 +73,9 @@ td {
 .wind-direction .arrow {
     font-size: 1.5em;
     font-weight: bold;
-
     transform: rotate(var(--wind-direction));
 }
+
 .wind-direction .arrow::after {
     content: '↓';
 }
@@ -82,17 +83,16 @@ td {
 .cloud-cover {
     border: 1px solid var(--dim-color);
     border-left: none;
-
     fill: var(--dim-color);
     stroke: var(--dim-color);
-
     text-align: center;
 }
 
-@keyframes fadeIn {
+@keyframes fade-in {
     0% {
         opacity: 0;
     }
+
     100% {
         opacity: 1;
     }

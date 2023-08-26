@@ -19,6 +19,7 @@
       devShells.default = pkgs.mkShell {
         nativeBuildInputs = with pkgs; [
           caddy
+          nodejs-18_x
         ];
       };
     });
