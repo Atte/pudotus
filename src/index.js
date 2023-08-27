@@ -101,7 +101,8 @@ async function refresh() {
 
     abortController?.abort();
     const myAbortController = (abortController = new AbortController());
-    main.innerHTML = '';
+
+    const tbody = main.cloneNode(false);
 
     const updateTime = getDataTime();
     let data;
@@ -120,11 +121,11 @@ async function refresh() {
         tr.querySelector('.wind-speed').textContent = data[PARAMS.WindSpeedMS].toFixed(0);
         tr.querySelector('.wind-direction').setAttribute('title', `${data[PARAMS.WindDirection].toFixed(0)}°`);
         tr.querySelector('.wind-direction .arrow').setAttribute('style', `--wind-direction: ${data[PARAMS.WindDirection]}deg`);
-        main.appendChild(tr);
+        tbody.appendChild(tr);
     }
 
     for (const [height, param] of Object.entries(CLOUD_HEIGHTS)) {
-        const tr = main.querySelector(`tr[data-height="${height}"]`);
+        const tr = tbody.querySelector(`tr[data-height="${height}"]`);
         const td = cloudCoverTemplate.cloneNode(true);
         td.querySelector('.value').textContent = data[param].toFixed(0);
         tr.appendChild(td);
@@ -134,6 +135,7 @@ async function refresh() {
         abortController = null;
     }
 
+    main.replaceWith(tbody);
     status.textContent = new Date(updateTime).toLocaleString('fi', {
         dateStyle: 'short',
         timeStyle: 'short',

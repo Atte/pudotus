@@ -58,13 +58,6 @@ label[for='show-licenses'] {
     display: none;
 }
 
-#status-container,
-tr,
-#footer,
-.cloud-cover {
-    animation: fade-in 1s;
-}
-
 table {
     margin: 0 auto;
 }
@@ -108,14 +101,4 @@ td {
     fill: var(--dim-color);
     stroke: var(--dim-color);
     text-align: center;
-}
-
-@keyframes fade-in {
-    0% {
-        opacity: 0;
-    }
-
-    100% {
-        opacity: 1;
-    }
 }
