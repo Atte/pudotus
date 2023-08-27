@@ -8,6 +8,10 @@
     color: var(--color);
 }
 
+noscript {
+    text-align: center;
+}
+
 #footer,
 a,
 a:visited,
@@ -34,6 +38,24 @@ a:active {
     margin-top: 1em;
     text-align: center;
     font-size: 0.7em;
+}
+
+#show-licenses {
+    display: none;
+}
+
+label[for='show-licenses'] {
+    cursor: pointer;
+    text-decoration: underline;
+}
+
+#licenses {
+    margin-top: 1em;
+    font-size: 1.2em;
+}
+
+#show-licenses:not(:checked) ~ #licenses {
+    display: none;
 }
 
 #status-container,

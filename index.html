@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
     <head>
         <meta charset="UTF-8" />
@@ -25,8 +25,21 @@
 
         <link rel="stylesheet" href="./src/index.css" />
         <script type="module" src="./src/index.js"></script>
+
+        <noscript>
+            <style>
+                body > :not(.noscript) {
+                    display: none !important;
+                }
+            </style>
+        </noscript>
     </head>
     <body>
+        <noscript class="noscript">
+            <p>This application runs entirely in your browser, so JavaScript is required.</p>
+            <p>Please enable JavaScript and reload the page.</p>
+        </noscript>
+
         <header id="status-container" class="loading">
             <img id="spinner" src="./img/spinner.png" width="16" height="16" fetchpriority="low" alt="" aria-hidden />
             <span id="status">Loading</span>
@@ -38,14 +51,22 @@
             </table>
         </main>
 
-        <footer id="footer">
-            <div>
-                <a href="https://en.ilmatieteenlaitos.fi/open-data">The Finnish Meteorological Institute's open data</a>
-                used on this page is licensed under a
-                <a href="https://creativecommons.org/licenses/by/4.0/">Creative Commons Attribution 4.0 International license</a>.
-            </div>
-            <div>
-                <a href="https://www.flaticon.com/free-icons/thrill" title="thrill icons">Thrill icons created by gravisio - Flaticon</a>.
+        <footer id="footer" class="noscript">
+            <a href="mailto:pudotus@atte.fi?subject=Pudotus">Contact</a>
+            |
+            <input type="checkbox" id="show-licenses" />
+            <label for="show-licenses">Licenses</label>
+
+            <div id="licenses">
+                <div>
+                    <a href="https://en.ilmatieteenlaitos.fi/open-data">The Finnish Meteorological Institute's open data</a>
+                    used on this page is licensed under a
+                    <a href="https://creativecommons.org/licenses/by/4.0/">Creative Commons Attribution 4.0 International license</a>.
+                </div>
+                <div>
+                    <a href="https://www.flaticon.com/free-icons/thrill" title="thrill icons">Thrill icons created by gravisio - Flaticon</a
+                    >.
+                </div>
             </div>
         </footer>
 

@@ -1,7 +1,8 @@
 {
     "nixEnvSelector.nixFile": "${workspaceRoot}/shell.nix",
     "files.exclude": {
-        ".direnv": true
+        ".direnv": true,
+        "node_modules": true
     },
     "[markdown]": {
         "editor.defaultFormatter": "esbenp.prettier-vscode",
