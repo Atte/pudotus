@@ -78,6 +78,9 @@ let abortController = null;
 async function refresh() {
     console.log('Refreshing...');
 
+    abortController?.abort();
+    const myAbortController = (abortController = new AbortController());
+
     /** @type {HTMLTableRowElement} */
     const rowTemplate = document.getElementById('row-template').content.querySelector('tr');
     /** @type {HTMLTableRowElement} */
@@ -97,19 +100,18 @@ async function refresh() {
             enableHighAccuracy: false,
         });
     });
+    if (myAbortController.signal.aborted) {
+        return;
+    }
     const latlon = [position.coords.latitude.toFixed(2), position.coords.longitude.toFixed(2)];
 
-    abortController?.abort();
-    const myAbortController = (abortController = new AbortController());
-
     const tbody = main.cloneNode(false);
-
     const updateTime = getDataTime();
     let data;
     for (const height of HEIGHTS) {
         status.textContent = `Loading ${height}m`;
-        data = await getData(updateTime, latlon, height, myAbortController);
 
+        data = await getData(updateTime, latlon, height, myAbortController);
         if (myAbortController.signal.aborted) {
             return;
         }
