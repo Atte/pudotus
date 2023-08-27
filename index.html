@@ -55,7 +55,37 @@
         </noscript>
 
         <header id="status-container" class="loading">
-            <img id="spinner" src="./img/spinner.png" width="16" height="16" fetchpriority="low" alt="" aria-hidden />
+            <!-- https://loading.io -->
+            <svg
+                id="spinner"
+                width="16"
+                height="16"
+                xmlns="http://www.w3.org/2000/svg"
+                viewBox="0 0 100 100"
+                preserveAspectRatio="xMidYMid"
+                role="progressbar"
+                alt=""
+                aria-hidden
+            >
+                <circle
+                    cx="50"
+                    cy="50"
+                    fill="none"
+                    stroke="#fff"
+                    stroke-width="16"
+                    r="35"
+                    stroke-dasharray="164.93361431346415 56.97787143782138"
+                >
+                    <animateTransform
+                        attributeName="transform"
+                        type="rotate"
+                        repeatCount="indefinite"
+                        dur="1s"
+                        values="0 50 50;360 50 50"
+                        keyTimes="0;1"
+                    / >
+                </circle>
+            </svg>
             <span id="status">Loading</span>
         </header>
 
@@ -73,13 +103,13 @@
 
             <div id="licenses">
                 <div>
-                    <a href="https://en.ilmatieteenlaitos.fi/open-data">The Finnish Meteorological Institute's open data</a>
+                    <a href="https://en.ilmatieteenlaitos.fi/open-data">The Finnish Meteorological Institute's HARMONIE forecast data</a>
                     used on this page is licensed under a
                     <a href="https://creativecommons.org/licenses/by/4.0/">Creative Commons Attribution 4.0 International license</a>.
                 </div>
                 <div>
                     <a href="https://www.flaticon.com/free-icons/thrill" title="thrill icons">Thrill icons created by gravisio - Flaticon</a
-                    >.
+                    >, used as the favicon.
                 </div>
             </div>
         </footer>

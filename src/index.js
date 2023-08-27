@@ -81,12 +81,11 @@ async function refresh() {
     abortController?.abort();
     const myAbortController = (abortController = new AbortController());
 
-    /** @type {HTMLTableRowElement} */
-    const rowTemplate = document.getElementById('row-template').content.querySelector('tr');
-    /** @type {HTMLTableRowElement} */
-    const cloudCoverTemplate = document.getElementById('cloud-cover-template').content.querySelector('td');
+    /** @type {DocumentFragment} */
+    const rowTemplate = document.getElementById('row-template').content;
+    /** @type {DocumentFragment} */
+    const cloudCoverTemplate = document.getElementById('cloud-cover-template').content;
 
-    const main = document.getElementById('main');
     const status = document.getElementById('status');
     const statusContainer = document.getElementById('status-container');
 
@@ -105,7 +104,9 @@ async function refresh() {
     }
     const latlon = [position.coords.latitude.toFixed(2), position.coords.longitude.toFixed(2)];
 
+    const main = document.getElementById('main');
     const tbody = main.cloneNode(false);
+
     const updateTime = getDataTime();
     let data;
     for (const height of HEIGHTS) {
@@ -117,7 +118,7 @@ async function refresh() {
         }
 
         const tr = rowTemplate.cloneNode(true);
-        tr.dataset.height = height;
+        tr.querySelector('tr').dataset.height = height;
         tr.querySelector('.height').textContent = height.toLocaleString('fi');
         tr.querySelector('.temperature').textContent = data[PARAMS.Temperature].toFixed(0);
         tr.querySelector('.wind-speed').textContent = data[PARAMS.WindSpeedMS].toFixed(0);

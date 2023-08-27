@@ -2,12 +2,10 @@
 
 Shows weather at altitudes relevant to skydivers.
 
-Uses [Finnish Meteorological Institute's open data](https://en.ilmatieteenlaitos.fi/open-data).
-
 ## License
 
 The software itself is licensed under the [MIT License](./LICENSE).
 
-Finnish Meteorological Institute data displayed by the software [is licensed under CC BY 4.0](https://en.ilmatieteenlaitos.fi/open-data-licence).
+[Thrill icons created by gravisio - Flaticon](https://www.flaticon.com/free-icons/thrill), used as the favicon.
 
-[Thrill icons created by gravisio - Flaticon](https://www.flaticon.com/free-icons/thrill).
+While not included in this repository, note that [The Finnish Meteorological Institute's open data](https://en.ilmatieteenlaitos.fi/open-data) used by the software at runtime is licensed under a [Creative Commons Attribution 4.0 International license](https://creativecommons.org/licenses/by/4.0/).
