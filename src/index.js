@@ -49,10 +49,10 @@ async function getData(time, latlon, height, abortController) {
         url.searchParams.set('height', height);
     }
 
+    url.searchParams.sort();
     const response = await fetch(url, {
         mode: 'cors',
         credentials: 'omit',
-        keepalive: true,
         signal: abortController?.signal,
     });
     if (!response.ok) {
@@ -150,6 +150,9 @@ function setupTimer() {
     const seconds = 60 * MINUTES_ACCURACY - ((new Date().getTime() / 1000) % (60 * MINUTES_ACCURACY)) + Math.random() * 60;
     console.log(`Next refresh in ${seconds.toFixed(0)} seconds`);
 
+    if (timer) {
+        clearTimeout(timer);
+    }
     timer = setTimeout(async () => {
         timer = null;
         if (document.visibilityState === 'visible') {
