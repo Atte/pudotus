@@ -6,6 +6,7 @@
     font-family: sans-serif;
     background-color: var(--background-color);
     color: var(--color);
+    box-sizing: border-box;
 }
 
 noscript {
@@ -67,6 +68,7 @@ td {
     text-align: right;
     padding: 0.2em 0.5em;
     white-space: nowrap;
+    margin: 0;
 }
 
 .height::after {
@@ -77,8 +79,9 @@ td {
     content: ' ℃';
 }
 
-.wind-speed::after {
-    content: ' m/s';
+.wind-speed::after,
+.wind-gust::after {
+    content: ' ᵐ⁄ₛ';
 }
 
 .cloud-cover .value::after {
@@ -96,9 +99,19 @@ td {
 }
 
 .cloud-cover {
-    border: 1px solid var(--dim-color);
+    border: 3px solid var(--dim-color);
     border-left: none;
+    border-top-right-radius: 1em;
+    border-bottom-right-radius: 1em;
     fill: var(--dim-color);
     stroke: var(--dim-color);
     text-align: center;
+}
+
+tr[data-height='4000'] .cloud-cover {
+    transform: translateY(calc(1rem + 0.2em));
+}
+
+tr[data-height='1500'] .cloud-cover {
+    transform: translateY(calc(-1rem - 0.2em));
 }

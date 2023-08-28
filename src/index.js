@@ -7,10 +7,11 @@ const PARAMS = {
 const SURFACE_PARAMS = {
     MediumCloudCover: 'MediumCloudCover',
     LowCloudCover: 'LowCloudCover',
+    WindGust: 'WindGust',
 };
 const CLOUD_HEIGHTS = {
     4000: SURFACE_PARAMS.MediumCloudCover,
-    2000: SURFACE_PARAMS.LowCloudCover,
+    1500: SURFACE_PARAMS.LowCloudCover,
 };
 const MINUTES_ACCURACY = 5;
 
@@ -85,6 +86,8 @@ async function refresh() {
     const rowTemplate = document.getElementById('row-template').content;
     /** @type {DocumentFragment} */
     const cloudCoverTemplate = document.getElementById('cloud-cover-template').content;
+    /** @type {DocumentFragment} */
+    const windGustTemplate = document.getElementById('wind-gust-template').content;
 
     const status = document.getElementById('status');
     const statusContainer = document.getElementById('status-container');
@@ -122,17 +125,20 @@ async function refresh() {
         tr.querySelector('.height').textContent = height.toLocaleString('fi');
         tr.querySelector('.temperature').textContent = data[PARAMS.Temperature].toFixed(0);
         tr.querySelector('.wind-speed').textContent = data[PARAMS.WindSpeedMS].toFixed(0);
-        tr.querySelector('.wind-direction').setAttribute('title', `${data[PARAMS.WindDirection].toFixed(0)}°`);
+        tr.querySelector('.wind-direction').setAttribute('title', `Wind direction: ${data[PARAMS.WindDirection].toFixed(0)}°`);
         tr.querySelector('.wind-direction .arrow').setAttribute('style', `--wind-direction: ${data[PARAMS.WindDirection]}deg`);
         tbody.appendChild(tr);
     }
 
     for (const [height, param] of Object.entries(CLOUD_HEIGHTS)) {
-        const tr = tbody.querySelector(`tr[data-height="${height}"]`);
         const td = cloudCoverTemplate.cloneNode(true);
         td.querySelector('.value').textContent = data[param].toFixed(0);
-        tr.appendChild(td);
+        tbody.querySelector(`tr[data-height="${height}"]`).appendChild(td);
     }
+
+    const td = windGustTemplate.cloneNode(true);
+    td.querySelector('.wind-gust').textContent = data[SURFACE_PARAMS.WindGust].toFixed(0);
+    tbody.querySelector(`tr[data-height="0"]`).appendChild(td);
 
     if (abortController === myAbortController) {
         abortController = null;

@@ -64,7 +64,6 @@
                 viewBox="0 0 100 100"
                 preserveAspectRatio="xMidYMid"
                 role="progressbar"
-                alt=""
                 aria-hidden
             >
                 <circle
@@ -83,7 +82,7 @@
                         dur="1s"
                         values="0 50 50;360 50 50"
                         keyTimes="0;1"
-                    / >
+                    />
                 </circle>
             </svg>
             <span id="status">Loading</span>
@@ -116,17 +115,17 @@
 
         <template id="row-template">
             <tr>
-                <th class="height" scope="row"></th>
-                <td class="temperature"></td>
-                <td class="wind-speed"></td>
-                <td class="wind-direction">
+                <th class="height" scope="row" title="Altitude"></th>
+                <td class="temperature" title="Temperature"></td>
+                <td class="wind-speed" title="Wind speed"></td>
+                <td class="wind-direction" title="Wind direction">
                     <div class="arrow"></div>
                 </td>
             </tr>
         </template>
 
         <template id="cloud-cover-template">
-            <td class="cloud-cover" rowspan="4">
+            <td class="cloud-cover" rowspan="4" title="Cloud cover">
                 <!-- https://openclipart.org/detail/246264/cloud -->
                 <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" viewBox="0 0 100 125">
                     <path
@@ -135,6 +134,10 @@
                 </svg>
                 <div class="value"></div>
             </td>
+        </template>
+
+        <template id="wind-gust-template">
+            <td class="wind-gust" title="Wind gust"></td>
         </template>
     </body>
 </html>
