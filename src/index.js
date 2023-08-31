@@ -200,24 +200,29 @@ async function refresh() {
     placeLabel.textContent = '';
     statusContainer.classList.add('loading');
 
-    /** @type {GeolocationPosition} */
-    let position;
-    try {
-        position = await new Promise((resolve, reject) => {
-            navigator.geolocation.getCurrentPosition(resolve, reject, {
-                maximumAge: 1000 * 60,
-                enableHighAccuracy: false,
+    let latlon;
+    const search = new URLSearchParams(location.search);
+    if (search.has('lat') && search.has('lon')) {
+        latlon = [search.get('lat'), search.get('lon')];
+    } else {
+        try {
+            /** @type {GeolocationPosition} */
+            const position = await new Promise((resolve, reject) => {
+                navigator.geolocation.getCurrentPosition(resolve, reject, {
+                    maximumAge: 1000 * 60,
+                    enableHighAccuracy: false,
+                });
             });
-        });
-    } catch (err) {
-        status.textContent = 'Error getting location';
-        statusContainer.classList.remove('loading');
-        throw err;
+            if (myAbortController.signal.aborted) {
+                return;
+            }
+            latlon = [position.coords.latitude.toFixed(2), position.coords.longitude.toFixed(2)];
+        } catch (err) {
+            status.textContent = 'Error getting location';
+            statusContainer.classList.remove('loading');
+            throw err;
+        }
     }
-    if (myAbortController.signal.aborted) {
-        return;
-    }
-    const latlon = [position.coords.latitude.toFixed(2), position.coords.longitude.toFixed(2)];
 
     getPlaceLabel(latlon, myAbortController).then(
         (label) => {
