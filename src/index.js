@@ -38,6 +38,11 @@ const REQUEST_TEMPLATE = `<?xml version="1.0" ?>
     </wfs:StoredQuery>
 </wfs:GetFeature>`;
 
+/**
+ * @typedef {[number|string, number|string]} LatLon
+ * @typedef {{[height: number]: {[key: string]: number}}} Datas
+ */
+
 /** @returns {string} */
 function getDataTime() {
     const now = new Date();
@@ -50,12 +55,32 @@ function getDataTime() {
 }
 
 /**
+ * Removes the oldest entries from a map to bring it down to at most `size` elements.
+ * @param {Map<any, any>} map
+ * @param {number} size
+ */
+function capMapSize(map, size) {
+    for (const key of Array.from(map.keys()).slice(-size)) {
+        map.delete(key);
+    }
+}
+
+/** @type {Map<string, Datas>} */
+const dataCache = new Map();
+
+/**
  * @param {string} time
- * @param {[number|string, number|string]} latlon
+ * @param {LatLon} latlon
  * @param {AbortController?} abortController
- * @returns {Promise<{[height: number]: {[key: string]: number}}>}
+ * @returns {Promise<Datas>}
  */
 async function getData(time, latlon, abortController) {
+    const cacheKey = `${time} ${latlon.join(',')}`;
+    const cached = dataCache.get(cacheKey);
+    if (cached) {
+        return cached;
+    }
+
     /** @type {XMLDocument} */
     const request = new DOMParser().parseFromString(REQUEST_TEMPLATE, 'text/xml');
     const queryTemplate = request.querySelector('StoredQuery');
@@ -102,7 +127,43 @@ async function getData(time, latlon, abortController) {
         }
         datas[data[PARAMS.GeomHeight] ?? 0] = data;
     }
+
+    capMapSize(dataCache, 10);
+    dataCache.set(cacheKey, datas);
     return datas;
+}
+
+/** @type {Map<string, string>} */
+const placeLabelCache = new Map();
+
+/**
+ * @param {LatLon} latlon
+ * @param {AbortController?} abortController
+ * @returns {Promise<string>}
+ */
+async function getPlaceLabel(latlon, abortController) {
+    const cached = placeLabelCache.get(latlon.join(','));
+    if (cached) {
+        return cached;
+    }
+
+    const response = await fetch(
+        `https://nominatim.openstreetmap.org/reverse?format=jsonv2&layer=address&zoom=13&addressdetails=0&lat=${latlon[0]}&lon=${latlon[1]}&email=pudotus@atte.fi`,
+        {
+            cache: 'force-cache',
+            mode: 'cors',
+            credentials: 'omit',
+            signal: abortController?.signal,
+        }
+    );
+    if (!response.ok) {
+        throw new Error(`${response.status} ${response.statusText}`);
+    }
+
+    const data = await response.json();
+    capMapSize(placeLabelCache, 100);
+    placeLabelCache.set(latlon.join(','), data.name);
+    return data.name;
 }
 
 /** @type {AbortController|null} */
@@ -110,8 +171,6 @@ let abortController = null;
 
 /** @returns {Promise<void>} */
 async function refresh() {
-    console.log('Refreshing...');
-
     abortController?.abort();
     const myAbortController = (abortController = new AbortController());
 
@@ -124,8 +183,10 @@ async function refresh() {
 
     const status = document.getElementById('status');
     const statusContainer = document.getElementById('status-container');
+    const placeLabel = document.getElementById('place-label');
 
     status.textContent = 'Geolocating';
+    placeLabel.textContent = '';
     statusContainer.classList.add('loading');
 
     /** @type {GeolocationPosition} */
@@ -139,6 +200,13 @@ async function refresh() {
         return;
     }
     const latlon = [position.coords.latitude.toFixed(2), position.coords.longitude.toFixed(2)];
+
+    getPlaceLabel(latlon, myAbortController).then((label) => {
+        if (myAbortController.signal.aborted) {
+            return;
+        }
+        placeLabel.textContent = label;
+    });
 
     status.textContent = `Loading data`;
     const main = document.getElementById('main');
@@ -219,12 +287,3 @@ addEventListener('unhandledrejection', (event) => {
 });
 
 refresh().finally(setupTimer);
-
-for (const el of document.querySelectorAll('.keyboard-interactive')) {
-    el.addEventListener('keydown', (event) => {
-        if (event.key === 'Enter') {
-            event.preventDefault();
-            event.target.click();
-        }
-    });
-}

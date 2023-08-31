@@ -21,7 +21,7 @@
 
         <meta
             http-equiv="Content-Security-Policy"
-            content="default-src 'none'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self'; connect-src https://opendata.fmi.fi/wfs; form-action 'none'; block-all-mixed-content; manifest-src 'self'"
+            content="default-src 'none'; script-src 'self'; style-src 'self'; img-src 'self'; manifest-src 'self'; connect-src https://opendata.fmi.fi/wfs https://nominatim.openstreetmap.org/reverse; form-action 'none'; block-all-mixed-content"
         />
         <meta name="referrer" content="strict-origin" />
 
@@ -39,53 +39,48 @@
 
         <link rel="stylesheet" href="./src/index.css" />
         <script type="module" src="./src/index.js"></script>
-
-        <noscript>
-            <style>
-                body > :not(.noscript) {
-                    display: none !important;
-                }
-            </style>
-        </noscript>
     </head>
     <body>
-        <noscript class="noscript">
+        <noscript>
             <p>This application runs entirely in your browser, so JavaScript is required.</p>
             <p>Please enable JavaScript and reload the page.</p>
         </noscript>
 
         <header id="status-container" class="loading">
-            <!-- https://loading.io -->
-            <svg
-                id="spinner"
-                width="16"
-                height="16"
-                xmlns="http://www.w3.org/2000/svg"
-                viewBox="0 0 100 100"
-                preserveAspectRatio="xMidYMid"
-                role="progressbar"
-                aria-hidden
-            >
-                <circle
-                    cx="50"
-                    cy="50"
-                    fill="none"
-                    stroke="#fff"
-                    stroke-width="16"
-                    r="35"
-                    stroke-dasharray="164.93361431346415 56.97787143782138"
+            <div>
+                <!-- https://loading.io -->
+                <svg
+                    id="spinner"
+                    width="16"
+                    height="16"
+                    xmlns="http://www.w3.org/2000/svg"
+                    viewBox="0 0 100 100"
+                    preserveAspectRatio="xMidYMid"
+                    role="progressbar"
+                    aria-hidden
                 >
-                    <animateTransform
-                        attributeName="transform"
-                        type="rotate"
-                        repeatCount="indefinite"
-                        dur="1s"
-                        values="0 50 50;360 50 50"
-                        keyTimes="0;1"
-                    />
-                </circle>
-            </svg>
-            <span id="status">Loading app</span>
+                    <circle
+                        cx="50"
+                        cy="50"
+                        fill="none"
+                        stroke="#fff"
+                        stroke-width="16"
+                        r="35"
+                        stroke-dasharray="164.93361431346415 56.97787143782138"
+                    >
+                        <animateTransform
+                            attributeName="transform"
+                            type="rotate"
+                            repeatCount="indefinite"
+                            dur="1s"
+                            values="0 50 50;360 50 50"
+                            keyTimes="0;1"
+                        />
+                    </circle>
+                </svg>
+                <span id="status">Loading app</span>
+            </div>
+            <div id="place-label"></div>
         </header>
 
         <main>
@@ -94,22 +89,18 @@
             </table>
         </main>
 
-        <footer id="footer" class="noscript">
-            <a href="mailto:pudotus@atte.fi?subject=Pudotus">Contact</a>
-            |
-            <input type="checkbox" id="show-licenses" />
-            <label for="show-licenses" class="keyboard-interactive" tabindex="0" aria-controls="licenses">Licenses</label>
-
-            <div id="licenses">
-                <div>
-                    <a href="https://en.ilmatieteenlaitos.fi/open-data">The Finnish Meteorological Institute's HARMONIE forecast data</a>
-                    used on this page is licensed under a
-                    <a href="https://creativecommons.org/licenses/by/4.0/">Creative Commons Attribution 4.0 International license</a>.
-                </div>
-                <div>
-                    <a href="https://www.flaticon.com/free-icons/thrill" title="thrill icons">Thrill icons created by gravisio - Flaticon</a
-                    >, used as the favicon.
-                </div>
+        <footer id="footer">
+            <div>
+                <a href="https://en.ilmatieteenlaitos.fi/open-data">Forecast data from FMI</a>
+                used under a
+                <a href="https://creativecommons.org/licenses/by/4.0/">CC BY 4.0</a> license.
+            </div>
+            <div>Location name provided by <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>.</div>
+            <div>
+                <a href="https://www.flaticon.com/free-icons/thrill" title="thrill icons">Thrill icons created by gravisio - Flaticon</a>.
+            </div>
+            <div id="contact">
+                <a href="mailto:pudotus@atte.fi?subject=Pudotus">Contact</a>
             </div>
         </footer>
 
