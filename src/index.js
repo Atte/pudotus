@@ -125,8 +125,8 @@ async function refresh() {
         tr.querySelector('.height').textContent = height.toLocaleString('fi');
         tr.querySelector('.temperature').textContent = data[PARAMS.Temperature].toFixed(0);
         tr.querySelector('.wind-speed').textContent = data[PARAMS.WindSpeedMS].toFixed(0);
-        tr.querySelector('.wind-direction').setAttribute('title', `Wind direction: ${data[PARAMS.WindDirection].toFixed(0)}°`);
-        tr.querySelector('.wind-direction .arrow').setAttribute('style', `--wind-direction: ${data[PARAMS.WindDirection]}deg`);
+        tr.querySelector('.wind-direction').title = `Wind direction: ${data[PARAMS.WindDirection].toFixed(0)}°`;
+        tr.querySelector('.wind-direction .arrow').style.setProperty('--wind-direction', `${data[PARAMS.WindDirection]}deg`);
         tbody.appendChild(tr);
     }
 
@@ -188,3 +188,12 @@ addEventListener('unhandledrejection', (event) => {
 });
 
 refresh().then(setupTimer);
+
+for (const el of document.querySelectorAll('.keyboard-interactive')) {
+    el.addEventListener('keydown', (event) => {
+        if (event.key === 'Enter') {
+            event.preventDefault();
+            event.target.click();
+        }
+    });
+}
