@@ -2,6 +2,8 @@
 
 Shows weather at altitudes relevant to skydivers.
 
+![Screenshot of the application](./img/screenshot.png)
+
 ## License
 
 The software itself is licensed under the [MIT License](./LICENSE).
