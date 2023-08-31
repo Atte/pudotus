@@ -91,11 +91,15 @@ td {
 .wind-direction .arrow {
     font-size: 1.5em;
     font-weight: bold;
-    transform: rotate(var(--wind-direction));
+    transform: rotate(calc(var(--wind-direction) + 90deg));
 }
 
 .wind-direction .arrow::after {
-    content: '↓';
+    content: '→';
+}
+
+.wind-gust {
+    text-align: left;
 }
 
 .cloud-cover {
