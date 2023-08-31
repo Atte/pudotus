@@ -191,27 +191,26 @@ function setupTimer() {
 
     if (timer) {
         clearTimeout(timer);
-    }
-    timer = setTimeout(async () => {
         timer = null;
-        if (document.visibilityState === 'visible') {
-            await refresh();
+    }
+    timer = setTimeout(() => {
+        if (timer) {
+            clearTimeout(timer);
         }
-        if (!timer) {
-            setupTimer();
-        }
+        timer = null;
+
+        refresh().finally(setupTimer);
     }, 1000 * seconds);
 }
 
-document.addEventListener('visibilitychange', async () => {
+document.addEventListener('visibilitychange', () => {
     if (timer) {
         clearTimeout(timer);
         timer = null;
     }
 
     if (document.visibilityState === 'visible') {
-        await refresh();
-        setupTimer();
+        refresh().finally(setupTimer);
     }
 });
 
@@ -219,7 +218,7 @@ addEventListener('unhandledrejection', (event) => {
     console.error(event);
 });
 
-refresh().then(setupTimer);
+refresh().finally(setupTimer);
 
 for (const el of document.querySelectorAll('.keyboard-interactive')) {
     el.addEventListener('keydown', (event) => {
