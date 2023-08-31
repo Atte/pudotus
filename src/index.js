@@ -38,6 +38,8 @@ const REQUEST_TEMPLATE = `<?xml version="1.0" ?>
     </wfs:StoredQuery>
 </wfs:GetFeature>`;
 
+class PrettyError extends Error {}
+
 /**
  * @typedef {[number|string, number|string]} LatLon
  * @typedef {{[height: number]: {[key: string]: number}}} Datas
@@ -112,6 +114,11 @@ async function getData(time, latlon, abortController) {
         signal: abortController?.signal,
     });
     if (!response.ok) {
+        const dom = new DOMParser().parseFromString(await response.text(), 'text/xml');
+        const exception = dom.querySelector('ExceptionText');
+        if (exception) {
+            throw new PrettyError(exception.textContent);
+        }
         throw new Error(`${response.status} ${response.statusText}`);
     }
 
@@ -157,6 +164,10 @@ async function getPlaceLabel(latlon, abortController) {
         }
     );
     if (!response.ok) {
+        const data = await response.json();
+        if (data?.error?.message) {
+            throw new PrettyError(data.error.message);
+        }
         throw new Error(`${response.status} ${response.statusText}`);
     }
 
@@ -190,30 +201,56 @@ async function refresh() {
     statusContainer.classList.add('loading');
 
     /** @type {GeolocationPosition} */
-    const position = await new Promise((resolve, reject) => {
-        navigator.geolocation.getCurrentPosition(resolve, reject, {
-            maximumAge: 1000 * 60,
-            enableHighAccuracy: false,
+    let position;
+    try {
+        position = await new Promise((resolve, reject) => {
+            navigator.geolocation.getCurrentPosition(resolve, reject, {
+                maximumAge: 1000 * 60,
+                enableHighAccuracy: false,
+            });
         });
-    });
+    } catch (err) {
+        status.textContent = 'Error getting location';
+        statusContainer.classList.remove('loading');
+        throw err;
+    }
     if (myAbortController.signal.aborted) {
         return;
     }
     const latlon = [position.coords.latitude.toFixed(2), position.coords.longitude.toFixed(2)];
 
-    getPlaceLabel(latlon, myAbortController).then((label) => {
-        if (myAbortController.signal.aborted) {
-            return;
+    getPlaceLabel(latlon, myAbortController).then(
+        (label) => {
+            if (myAbortController.signal.aborted) {
+                return;
+            }
+            placeLabel.textContent = label;
+        },
+        (err) => {
+            if (err instanceof PrettyError) {
+                placeLabel.textContent = err.message;
+            }
+            throw err;
         }
-        placeLabel.textContent = label;
-    });
+    );
 
     status.textContent = `Loading data`;
     const main = document.getElementById('main');
     const tbody = main.cloneNode(false);
 
     const updateTime = getDataTime();
-    const datas = await getData(updateTime, latlon, myAbortController);
+    let datas;
+    try {
+        datas = await getData(updateTime, latlon, myAbortController);
+    } catch (err) {
+        if (err instanceof PrettyError) {
+            status.textContent = err.message;
+        } else {
+            status.textContent = 'Error loading data';
+        }
+        statusContainer.classList.remove('loading');
+        throw err;
+    }
     if (myAbortController.signal.aborted) {
         return;
     }
